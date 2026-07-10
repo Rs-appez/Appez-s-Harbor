@@ -1,7 +1,7 @@
 resource "proxmox_virtual_environment_vm" "k3s_master" {
   name      = "k3s-master"
   node_name = "pve"
-  
+
   clone {
     vm_id = 9000
   }
