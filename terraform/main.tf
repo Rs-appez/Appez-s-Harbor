@@ -56,7 +56,7 @@ resource "proxmox_virtual_environment_vm" "k3s_workers" {
   initialization {
     ip_config {
       ipv4 {
-        address = "192.168.1.${var.worker_ip_start + count.index}/24"
+        address = "192.168.0.${var.worker_ip_start + count.index}/24"
         gateway = var.gateway
       }
     }
@@ -66,4 +66,3 @@ resource "proxmox_virtual_environment_vm" "k3s_workers" {
     }
   }
 }
-

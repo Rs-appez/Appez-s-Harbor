@@ -21,7 +21,7 @@ variable "gateway" {
 
 variable "master_ip" {
   type    = string
-  default = "192.168.1.50/24"
+  default = "192.168.0.50/24"
 }
 
 variable "worker_count" {
