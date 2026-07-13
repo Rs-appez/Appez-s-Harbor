@@ -1,4 +1,4 @@
-.PHONY: init apply-base apply-cluster destroy-base destroy-cluster clean
+.PHONY: init create-base create-cluster destroy-base destroy-cluster clean
 
 # ── Initialize ──────────────────────────────────────────────────────────
 init:
