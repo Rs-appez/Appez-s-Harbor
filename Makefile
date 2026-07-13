@@ -2,35 +2,39 @@
 
 # ── Initialize ──────────────────────────────────────────────────────────
 init:
-	cd terraform && terraform init
+	@echo "🔗 Symlinking shared terraform.tfvars..."
+	@ln -sf ../terraform.tfvars terraform/base/terraform.tfvars
+	@ln -sf ../terraform.tfvars terraform/cluster/terraform.tfvars
+
+	cd terraform/base && terraform init
+	cd terraform/cluster && terraform init
 
 # ── First Run: Create Base Template (VM 9000) ───────────────────────────
-apply-base:
+create-base:
 	@echo "🛠️  Enabling snippets content type on Proxmox storage..."
 	ssh proxmox "pvesm set local --content iso,vztmpl,backup,import,snippets"
 
 	@echo "📦 Creating base template (VM 9000)..."
-	cd terraform && \
-		terraform apply -target="proxmox_virtual_environment_download_file.alpine_cloud" -auto-approve && \
-		terraform apply -target="proxmox_virtual_environment_vm.alpine_template" -auto-approve && \
-		terraform apply -auto-approve && \
-		terraform output -raw base_setup_status
+	cd terraform/base && terraform apply -auto-approve
 
 # ── Deploy K3s Cluster ──────────────────────────────────────────────────
-apply-cluster:
+create-cluster:
 	@echo "🚀 Deploying K3s cluster..."
-	cd terraform && terraform apply -auto-approve
+	cd terraform/cluster && terraform apply -auto-approve
 
 # ── Cleanup Base Template ───────────────────────────────────────────────
 destroy-base:
 	@echo "🗑️  Removing base template..."
-	ssh root@$(shell grep "proxmox_host" terraform/terraform.tfvars | cut -d'"' -f2) \
-		"qm destroy 9000 --destroy-unreferenced-disks --skip-lock true"
+	cd terraform/base && terraform destroy -auto-approve
+	ssh root@$(shell grep "proxmox_host" terraform/base/terraform.tfvars | cut -d'"' -f2) \
+		"qm destroy 9000 --destroy-unreferenced-disks --skip-lock true" || true
 
 # ── Destroy K3s Cluster ─────────────────────────────────────────────────
 destroy-cluster:
-	cd terraform && terraform destroy -auto-approve
+	@echo "🔥 Destroying K3s cluster..."
+	cd terraform/cluster && terraform destroy -auto-approve
 
 # ── Clean Everything ────────────────────────────────────────────────────
-clean: destroy-base destroy-cluster
-	rm -rf terraform/terraform.tfstate*
+clean: destroy-cluster destroy-base
+	rm -rf terraform/base/terraform.tfstate* terraform/base/terraform.tfvars
+	rm -rf terraform/cluster/terraform.tfstate* terraform/cluster/terraform.tfvars

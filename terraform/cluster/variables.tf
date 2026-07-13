@@ -39,9 +39,3 @@ variable "worker_ip_start" {
   default     = 51
   description = "The last octet of the IP address to start worker nodes at"
 }
-
-variable "ssh_private_key_path" {
-  type        = string
-  description = "Path to the SSH private key for Proxmox"
-  default     = "~/.ssh/proxmox"
-}
