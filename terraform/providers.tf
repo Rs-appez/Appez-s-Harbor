@@ -12,5 +12,11 @@ provider "proxmox" {
   api_token = var.proxmox_api_token
   insecure  = false
 
+  ssh {
+    agent       = false
+    username    = "root"
+    private_key = file(var.ssh_private_key_path)
+  }
+
 }
 
