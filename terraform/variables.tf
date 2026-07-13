@@ -19,6 +19,11 @@ variable "gateway" {
   default = "192.168.0.1"
 }
 
+variable "dns_server" {
+  type    = string
+  default = "192.168.0.192"
+}
+
 variable "master_ip" {
   type    = string
   default = "192.168.0.50/24"
@@ -33,4 +38,10 @@ variable "worker_ip_start" {
   type        = number
   default     = 51
   description = "The last octet of the IP address to start worker nodes at"
+}
+
+variable "ssh_private_key_path" {
+  type        = string
+  description = "Path to the SSH private key for Proxmox"
+  default     = "~/.ssh/proxmox"
 }
