@@ -19,11 +19,15 @@ resource "proxmox_virtual_environment_vm" "k3s_master" {
   }
 
   initialization {
+    user_data_file_id = proxmox_virtual_environment_file.alpine_cloud_init.id
     ip_config {
       ipv4 {
         address = var.master_ip
         gateway = var.gateway
       }
+    }
+    dns {
+      servers = [var.dns_server, "1.1.1.1"]
     }
     user_account {
       username = "alpine"
@@ -54,11 +58,16 @@ resource "proxmox_virtual_environment_vm" "k3s_workers" {
   }
 
   initialization {
+    user_data_file_id = proxmox_virtual_environment_file.alpine_cloud_init.id
+
     ip_config {
       ipv4 {
         address = "192.168.0.${var.worker_ip_start + count.index}/24"
         gateway = var.gateway
       }
+    }
+    dns {
+      servers = [var.dns_server, "1.1.1.1"]
     }
     user_account {
       username = "alpine"
