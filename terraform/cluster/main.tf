@@ -1,3 +1,8 @@
+resource "random_password" "k3s_token" {
+  length  = 64
+  special = false
+}
+
 resource "proxmox_virtual_environment_vm" "k3s_master" {
   name      = "k3s-master"
   node_name = "pve"
