@@ -1,5 +1,5 @@
 *.tfvars*
-secrets.*
+*.pkrvars.*
 
 *.tfstate*
 .terraform/
