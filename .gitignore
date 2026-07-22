@@ -3,3 +3,4 @@
 
 *.tfstate*
 .terraform/
+packer/downloaded_iso_path/*
