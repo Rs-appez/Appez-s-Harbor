@@ -11,11 +11,14 @@ init:
 .PHONY: create-base
 # ── First Run: Create Base Template (VM 9000) ───────────────────────────
 create-base:
-	@echo "🛠️  Enabling snippets content type on Proxmox storage..."
-	ssh proxmox "pvesm set local --content iso,vztmpl,backup,import,snippets"
-
-	@echo "📦 Creating base template (VM 9000)..."
-	cd terraform/base && terraform apply -auto-approve
+	@echo "🏗️  Creating base template..."
+	@TMPDIR=$$(mktemp -d) && \
+    trap 'rm -rf "$$TMPDIR"' EXIT; \
+    ssh-keygen -t ed25519 -f "$$TMPDIR/pkr_key" -N '' -q && \
+    packer init packer && \
+    cd packer && packer build \
+    -var "build_ssh_public_key=$$(cat $$TMPDIR/pkr_key.pub)" \
+    -var "build_ssh_private_key_path=$$TMPDIR/pkr_key" .
 
 .PHONY: create-cluster
 # ── Deploy K3s Cluster ──────────────────────────────────────────────────
