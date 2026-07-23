@@ -24,7 +24,6 @@ rc-update add qemu-guest-agent default 2>/dev/null || true
 rc-update add networking boot
 rc-update add acpid default
 rc-update add sshd default
-rc-update add chronyd default
 rc-update add cloud-init-local boot
 rc-update add cloud-init default
 rc-update add cloud-config default
