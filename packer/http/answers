@@ -1,0 +1,19 @@
+# Sourced by setup-alpine(8) as a shell fragment.
+KEYMAPOPTS="us us"
+HOSTNAMEOPTS="-n alpine-tpl"   # placeholder; cloud-init sets the real hostname per clone
+INTERFACESOPTS="auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+"
+DNSOPTS="-n 1.1.1.1"           # placeholder; DHCP overwrites /etc/resolv.conf at runtime
+TIMEZONEOPTS="-z UTC"
+PROXYOPTS="none"
+APKREPOSOPTS="-1"              # we rewrite repos to HTTPS during provisioning anyway
+SSHDOPTS="-c openssh"
+NTPOPTS="-c chrony"
+USEROPTS="none"
+DISKOPTS="-m sys /dev/sda"     # virtio-scsi == /dev/sda (virtio-blk would be /dev/vda)
+LBUOPTS="none"
+APKCACHEOPTS="none"
