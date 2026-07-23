@@ -1,4 +1,3 @@
-
 resource "proxmox_virtual_environment_vm" "k3s_master" {
   name      = "k3s-master"
   node_name = "pve"
@@ -20,7 +19,6 @@ resource "proxmox_virtual_environment_vm" "k3s_master" {
   }
 
   initialization {
-    user_data_file_id = "local:snippets/alpine-qemu-guest-agent.yaml"
     ip_config {
       ipv4 {
         address = var.master_ip
@@ -59,7 +57,6 @@ resource "proxmox_virtual_environment_vm" "k3s_workers" {
   }
 
   initialization {
-    user_data_file_id = "local:snippets/alpine-qemu-guest-agent.yaml"
 
     ip_config {
       ipv4 {
