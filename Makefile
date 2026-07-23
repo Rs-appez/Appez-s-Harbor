@@ -30,7 +30,6 @@ create-cluster:
 # ── Cleanup Base Template ───────────────────────────────────────────────
 destroy-base:
 	@echo "🗑️  Removing base template..."
-	cd terraform/base && terraform destroy -auto-approve
 	ssh root@$(shell grep "proxmox_host" terraform/base/terraform.tfvars | cut -d'"' -f2) \
 		"qm destroy 9000 --destroy-unreferenced-disks --skip-lock true" || true
 
